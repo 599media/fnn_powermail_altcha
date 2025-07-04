@@ -1,0 +1,45 @@
+{
+	"name": "fnn/fnn-powermail-altcha",
+	"type": "typo3-cms-extension",
+	"description": "Altcha Spam Protection for powermail",
+	"keywords": [
+		"TYPO3",
+		"gdpr"
+	],
+	"homepage": "https://599media.de",
+	"license": "MIT",
+	"require": {
+		"typo3/cms-core": ">= 10.4.0 <= 13.4.99",
+		"php": ">= 7.4 <= 8.4",
+		"altcha-org/altcha": "0.1.4"
+	},
+	"require-dev": {
+		"typo3/cms-composer-installers": "^3.1.3 || 4.0.0-RC1 || ^5.0"
+	},
+	"replace": {
+		"typo3-ter/fnn-powermail-altcha": "self.version"
+	},
+	"config": {
+		"allow-plugins": {
+			"typo3/class-alias-loader": true,
+			"typo3/cms-composer-installers": true
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "fnn_powermail_altcha"
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"Fnn\\FnnPowermailAltcha\\": "Classes"
+		}
+	},
+	"minimum-stability": "alpha",
+	"authors": [
+		{
+			"name": "599media DEV-Team",
+			"email": "info@599media.de"
+		}
+	]
+}

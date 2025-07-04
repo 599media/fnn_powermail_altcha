@@ -1,0 +1,21 @@
+{namespace pa=Fnn\FnnPowermailAltcha\ViewHelpers}
+
+<f:asset.script identifier="powermailAltcha" src="EXT:fnn_powermail_altcha/Resources/Public/JavaScript/altcha.min.js" defer="true" async="true" type="module" />
+
+<f:variable name="altchaConfig" value="{pa:altchaSpamProtection(settings: settings)}" />
+
+<f:variable name="widgetOptions"></f:variable>
+<f:if condition="{altchaConfig.configuration.hideLogo} === '0'"><f:variable name="widgetOptions">{widgetOptions} hidelogo</f:variable></f:if>
+<f:if condition="{altchaConfig.configuration.hideFooter} === '0'"><f:variable name="widgetOptions">{widgetOptions} hidefooter</f:variable></f:if>
+
+<div class="powermail_fieldwrap powermail_fieldwrap_type_altcha powermail_fieldwrap_{field.marker} {field.css} {settings.styles.framework.fieldAndLabelWrappingClasses}">
+	<div class="{settings.styles.framework.fieldWrappingClasses}">
+		<altcha-widget
+			challengejson="{altchaConfig.altchaChallenge -> f:format.json()}"
+			name="tx_powermail_pi1[field][{field.marker}]"
+			strings="{altchaConfig.langLabels -> f:format.json()}"
+			{widgetOptions}
+			auto="{altchaConfig.configuration.validation}"
+			data-lifetime="{altchaConfig.lifetime}"></altcha-widget>
+	</div>
+</div>

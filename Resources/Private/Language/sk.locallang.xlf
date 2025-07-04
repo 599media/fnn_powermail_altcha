@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" original="messages" datatype="plaintext" product-name="fnn_powermail_altcha" date="2025-06-03T08:37:30+02:00" target-language="sk">
+        <body>
+            <trans-unit id="altchaWidget.error" resname="altchaWidget.error">
+                <source>Verification failed. Try again later.</source>
+                <target>Overenie zlyhalo. Skúste to neskôr.</target>
+            </trans-unit>
+            <trans-unit id="altchaWidget.expired" resname="altchaWidget.expired">
+                <source>Verification expired. Try again.</source>
+                <target>Platnosť overenia uplynula. Skúste to znova.</target>
+            </trans-unit>
+            <trans-unit id="altchaWidget.label" resname="altchaWidget.label">
+                <source>I'm not a robot</source>
+                <target>Nie som robot</target>
+            </trans-unit>
+            <trans-unit id="altchaWidget.verified" resname="altchaWidget.verified">
+                <source>Verified</source>
+                <target>Overené</target>
+            </trans-unit>
+            <trans-unit id="altchaWidget.verifying" resname="altchaWidget.verifying">
+                <source>Verifying...</source>
+                <target>Overovanie...</target>
+            </trans-unit>
+            <trans-unit id="altchaWidget.waitAlert" resname="altchaWidget.waitAlert">
+                <source>Verifying... please wait.</source>
+                <target>Overovanie... čakajte prosím.</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

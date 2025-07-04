@@ -1,0 +1,39 @@
+plugin.tx_powermail {
+    view {
+        partialRootPaths {
+            5 = EXT:fnn_powermail_altcha/Resources/Private/Templates/Powermail/Partials/
+        }
+    }
+
+    settings {
+        setup {
+            spamshield {
+                methods {
+                    # Add altcha spamcheck
+                    2025 {
+                        _enable = 1
+                        name = Altcha Spam Protection
+                        class = Fnn\FnnPowermailAltcha\Domain\Validator\SpamShield\AltchaMethod
+                        indication = 100
+                        configuration {
+                            hmacKey = {$plugin.tx_fnn_powermail_altcha.hmacKey}
+                            maxNumber = {$plugin.tx_fnn_powermail_altcha.maxNumber}
+                            expires = {$plugin.tx_fnn_powermail_altcha.expires}
+                            hideLogo = {$plugin.tx_fnn_powermail_altcha.hideLogo}
+                            hideFooter = {$plugin.tx_fnn_powermail_altcha.hidefooter}
+                            validation = {$plugin.tx_fnn_powermail_altcha.validation}
+                            labels {
+                                error = {$plugin.tx_fnn_powermail_altcha.labels.error}
+                                expired = {$plugin.tx_fnn_powermail_altcha.labels.expired}
+                                label = {$plugin.tx_fnn_powermail_altcha.labels.label}
+                                verified = {$plugin.tx_fnn_powermail_altcha.labels.verified}
+                                verifying = {$plugin.tx_fnn_powermail_altcha.labels.verifying}
+                                waitAlert = {$plugin.tx_fnn_powermail_altcha.labels.waitAlert}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

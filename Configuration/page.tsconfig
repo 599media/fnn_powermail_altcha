@@ -1,0 +1,6 @@
+###########################
+# POWERMAIL FLEXFORM
+###########################
+tx_powermail.flexForm.type.addFieldOptions {
+    altchaSpamProtection = Altcha Spam Protection
+}
