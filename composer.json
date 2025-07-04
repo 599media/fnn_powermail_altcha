@@ -1,7 +1,7 @@
 {
 	"name": "fnn/fnn-powermail-altcha",
 	"type": "typo3-cms-extension",
-	"description": "Altcha Spam Protection for powermail",
+	"description": "Altcha Captcha for Powermail - Accessible and GDPR compliant proof-of-work (pow) captcha for powermail, no external service required",
 	"keywords": [
 		"TYPO3",
 		"gdpr"

@@ -1,8 +1,8 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => '599media Powermail Altcha',
-    'description' => 'Altcha Spam Protection for powermail',
+    'title' => 'Altcha Captcha for Powermail',
+    'description' => 'Accessible and GDPR compliant proof-of-work (pow) captcha for powermail, no external service required',
     'version' => '10.0.0',
     'category' => 'service',
     'author' => '599media Dev-Team',
