@@ -31,7 +31,7 @@ class AltchaMethod extends AbstractMethod
     public function spamCheck(): bool
     {
         // If the action is not Create, no check is carried out.
-        if ($this->arguments['action'] !== 'create') {
+        if ($this->arguments['action'] !== 'create' && $this->arguments['action'] !== 'checkCreate') {
             return false;
         }
 
