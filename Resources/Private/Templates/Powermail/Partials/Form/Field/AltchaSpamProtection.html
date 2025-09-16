@@ -5,8 +5,8 @@
 <f:variable name="altchaConfig" value="{pa:altchaSpamProtection(settings: settings)}" />
 
 <f:variable name="widgetOptions"></f:variable>
-<f:if condition="{altchaConfig.configuration.hideLogo} === '0'"><f:variable name="widgetOptions">{widgetOptions} hidelogo</f:variable></f:if>
-<f:if condition="{altchaConfig.configuration.hideFooter} === '0'"><f:variable name="widgetOptions">{widgetOptions} hidefooter</f:variable></f:if>
+<f:if condition="{altchaConfig.configuration.hideLogo} === '1'"><f:variable name="widgetOptions">{widgetOptions} hidelogo</f:variable></f:if>
+<f:if condition="{altchaConfig.configuration.hideFooter} === '1'"><f:variable name="widgetOptions">{widgetOptions} hidefooter</f:variable></f:if>
 
 <div class="powermail_fieldwrap powermail_fieldwrap_type_altcha powermail_fieldwrap_{field.marker} {field.css} {settings.styles.framework.fieldAndLabelWrappingClasses}">
 	<div class="{settings.styles.framework.fieldWrappingClasses}">

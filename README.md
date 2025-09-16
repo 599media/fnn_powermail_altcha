@@ -58,6 +58,7 @@ The visitor then sees the Altcha widget. This additional validation effectively 
 ```
 plugin.tx_fnn_powermail_altcha {
     # HMAC key (random character string)
+    **IMPORTANT: For security, you must generate a unique key for your installation and replace the placeholder below.**
     hmacKey = K70ne+Ej;5NjJy&}09Dj~Kxr{Z
 
     # Maximum number for the challenge
