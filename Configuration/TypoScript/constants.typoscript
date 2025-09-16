@@ -1,6 +1,6 @@
 plugin.tx_fnn_powermail_altcha {
     # cat=Powermail Altcha/option/100; type=string; label=hmacKey
-    hmacKey = K70ne+Ej;5NjJy&}09Dj~Kxr{Z
+    hmacKey = [YOUR_UNIQUE_KEY_HERE]
     # cat=Powermail Altcha/option/110; type=int+; label=max Number
     maxNumber = 999999
     # cat=Powermail Altcha/option/120; type=int+; label=Expires in seconds. If the value is 0, a challenge is valid for 24 hours.
