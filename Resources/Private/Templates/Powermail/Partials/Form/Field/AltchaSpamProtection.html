@@ -4,18 +4,41 @@
 
 <f:variable name="altchaConfig" value="{pa:altchaSpamProtection(settings: settings)}" />
 
+<f:debug>{altchaConfig}</f:debug>
 <f:variable name="widgetOptions"></f:variable>
 <f:if condition="{altchaConfig.configuration.hideLogo} === '1'"><f:variable name="widgetOptions">{widgetOptions} hidelogo</f:variable></f:if>
 <f:if condition="{altchaConfig.configuration.hideFooter} === '1'"><f:variable name="widgetOptions">{widgetOptions} hidefooter</f:variable></f:if>
 
 <div class="powermail_fieldwrap powermail_fieldwrap_type_altcha powermail_fieldwrap_{field.marker} {field.css} {settings.styles.framework.fieldAndLabelWrappingClasses}">
-	<div class="{settings.styles.framework.fieldWrappingClasses}">
-		<altcha-widget
-			challengejson="{altchaConfig.altchaChallenge -> f:format.json()}"
-			name="tx_powermail_pi1[field][{field.marker}]"
-			strings="{altchaConfig.langLabels -> f:format.json()}"
-			{widgetOptions}
-			auto="{altchaConfig.configuration.validation}"
-			data-lifetime="{altchaConfig.lifetime}"></altcha-widget>
-	</div>
+    <div class="{settings.styles.framework.fieldWrappingClasses}">
+        <f:if condition="{altchaConfig.hmacKey} == 'error'">
+            <f:then>
+                <f:render partial="AltchaSpamProtectionError" arguments="{message: 'No HMAC Key found. Please check TypoScript configuration'}"></f:render>
+            </f:then>
+            <f:else>
+                <altcha-widget
+                        challengejson="{altchaConfig.altchaChallenge -> f:format.json()}"
+                        name="tx_powermail_pi1[field][{field.marker}]"
+                        id="tx_powermail_pi1[field][{field.marker}]_widget"
+                        strings="{altchaConfig.langLabels -> f:format.json()}"
+                        {widgetOptions}
+                        data-powermail-error-container=".powermail_field_error_container_{field.marker}"
+                        auto="{altchaConfig.configuration.validation}"
+                        data-lifetime="{altchaConfig.lifetime}"></altcha-widget>
+            </f:else>
+        </f:if>
+    </div>
+    <div class="powermail_field_error_container powermail_field_error_container_{field.marker}"></div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('altcha-widget').forEach(function(widget) {
+            widget.addEventListener('load', function(event) {
+                widget.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+                    checkbox.setAttribute('name', checkbox.id || 'altcha-checkbox-' + + Math.floor(Math.random() * 90000 + 10000));
+                    checkbox.setAttribute('data-powermail-errors-container', widget.getAttribute('data-powermail-error-container'))
+                });
+            });
+        });
+    });
+</script>

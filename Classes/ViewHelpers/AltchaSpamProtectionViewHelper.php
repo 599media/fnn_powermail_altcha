@@ -4,6 +4,7 @@ namespace Fnn\FnnPowermailAltcha\ViewHelpers;
 use AltchaOrg\Altcha\ChallengeOptions;
 use Fnn\FnnPowermailAltcha\Service\AltchaService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class AltchaSpamProtectionViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
@@ -41,11 +42,10 @@ class AltchaSpamProtectionViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\A
      */
     public function render(): array
     {
-        if (isset($this->arguments['settings']['spamshield']['methods'][2025]['configuration']['hmacKey'])) {
-            $this->hmacKey = $this->arguments['settings']['spamshield']['methods'][2025]['configuration']['hmacKey'];
-        } else {
-            $this->hmacKey = 'xjLN96F6Q4lTv9Q0wOyC9aJ9IJFcLF';
-        }
+
+        $this->hmacKey = $this->getHmacKey($this->arguments['settings']);
+
+        $altchaService = GeneralUtility::makeInstance(AltchaService::class,$this->hmacKey, $this->maxNumber, $this->expires, $this->pid);
 
         if (isset($this->arguments['settings']['spamshield']['methods'][2025]['configuration']['maxNumber']) &&
             (int)$this->arguments['settings']['spamshield']['methods'][2025]['configuration']['maxNumber'] > 0) {
@@ -66,8 +66,6 @@ class AltchaSpamProtectionViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\A
             $this->pid = (int)$this->arguments['settings']['main']['pid'];
         }
 
-        $altchaService = GeneralUtility::makeInstance(AltchaService::class, $this->hmacKey, $this->maxNumber, $this->expires, $this->pid);
-
         if (isset($this->arguments['settings']['spamshield']['methods'][2025]['configuration']['labels'])) {
             $labelKeys = $this->arguments['settings']['spamshield']['methods'][2025]['configuration']['labels'];
 
@@ -80,12 +78,26 @@ class AltchaSpamProtectionViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\A
                 'waitAlert' => LocalizationUtility::translate($labelKeys['waitAlert']),
             ];
         }
-
+        DebuggerUtility::var_dump($altchaService);
         return [
             'altchaChallenge' => $altchaService->createChallenge(),
             'langLabels' => $langLabels ?? [],
             'lifetime' => $this->expires,
-            'configuration' => $this->arguments['settings']['spamshield']['methods'][2025]['configuration']
+            'configuration' => $this->arguments['settings']['spamshield']['methods'][2025]['configuration'],
+            'hmacKey' => $this->hmacKey,
         ];
+    }
+
+    // TODO: Duplicate code here and in Spamshield Validator. Refactoring to later time
+    private function getHmacKey($settings): string
+    {
+        if($settings['spamshield']['methods'][2025]['configuration']['hmacKey'] !== '[YOUR_UNIQUE_KEY_HERE]' && $settings['spamshield']['methods'][2025]['configuration']['hmacKey'] !== '') {
+            $this->hmacKey = $settings['spamshield']['methods'][2025]['configuration']['hmacKey'];
+            return $settings['spamshield']['methods'][2025]['configuration']['hmacKey'];
+        } else if ($GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'] !== '') {
+            return $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'];
+        } else {
+            return 'error';
+        }
     }
 }

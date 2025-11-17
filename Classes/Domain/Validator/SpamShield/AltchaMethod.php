@@ -5,6 +5,7 @@ use Fnn\FnnPowermailAltcha\Service\AltchaService;
 use In2code\Powermail\Domain\Model\Answer;
 use In2code\Powermail\Domain\Validator\SpamShield\AbstractMethod;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Class AltchaMethod
@@ -66,11 +67,16 @@ class AltchaMethod extends AbstractMethod
      */
     protected function altchaCheck(string $value, Answer $answer): bool
     {
-        if (isset( $this->settings['settings']['spamshield']['methods'][2025]['configuration']['hmacKey'])) {
-            $this->hmacKey =  $this->settings['settings']['spamshield']['methods'][2025]['configuration']['hmacKey'];
-        } else {
-            $this->hmacKey = 'xjLN96F6Q4lTv9Q0wOyC9aJ9IJFcLF';
-        }
+
+        $this->hmacKey = $this->getHmacKey($this->settings);
+
+        $altchaService = GeneralUtility::makeInstance(
+            AltchaService::class,
+            $this->hmacKey,
+            (int)$this->settings['spamshield']['methods'][2025]['configuration']['maxNumber'],
+            (int)$this->settings['spamshield']['methods'][2025]['configuration']['expires']);
+
+            $this->hmacKey = $altchaService->getHmacKey($this->arguments['settings']);
 
         if (isset( $this->settings['settings']['spamshield']['methods'][2025]['configuration']['maxNumber']) &&
             (int) $this->settings['settings']['spamshield']['methods'][2025]['configuration']['maxNumber'] > 0) {
@@ -89,12 +95,6 @@ class AltchaMethod extends AbstractMethod
         $decodedPayload = base64_decode($value);
         $payload = json_decode($decodedPayload, true);
 
-        $altchaService = GeneralUtility::makeInstance(
-            AltchaService::class,
-            $this->settings['spamshield']['methods'][2025]['configuration']['hmacKey'],
-            (int)$this->settings['spamshield']['methods'][2025]['configuration']['maxNumber'],
-            (int)$this->settings['spamshield']['methods'][2025]['configuration']['expires']);
-
         $checkResult = $altchaService->verifySolution($payload);
         if ($checkResult) {
             $answer->setValue('valid');
@@ -103,5 +103,17 @@ class AltchaMethod extends AbstractMethod
         }
 
         return $checkResult;
+    }
+
+    private function getHmacKey($settings): string
+    {
+        if($settings['spamshield']['methods'][2025]['configuration']['hmacKey'] !== '[YOUR_UNIQUE_KEY_HERE]' && $settings['spamshield']['methods'][2025]['configuration']['hmacKey'] !== '') {
+            $this->hmacKey = $settings['spamshield']['methods'][2025]['configuration']['hmacKey'];
+            return $settings['spamshield']['methods'][2025]['configuration']['hmacKey'];
+        } else if ($GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'] !== '') {
+            return $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'];
+        } else {
+            return 'error';
+        }
     }
 }

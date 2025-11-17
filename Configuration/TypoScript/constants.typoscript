@@ -11,7 +11,7 @@ plugin.tx_fnn_powermail_altcha {
     # cat=Powermail Altcha/option/140; type=boolean; label=Hide altcha footer
     hidefooter = 0
     # cat=Powermail Altcha/option/150; type=options[off,onfocus,onload,onsubmit]; label=Validation type
-    validation = off
+    validation = load
     labels {
         # cat=Powermail Altcha/label/410; type=string; label=Error label
         error = LLL:EXT:fnn_powermail_altcha/Resources/Private/Language/locallang.xlf:altchaWidget.error
