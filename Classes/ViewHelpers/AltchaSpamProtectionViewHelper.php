@@ -4,7 +4,6 @@ namespace Fnn\FnnPowermailAltcha\ViewHelpers;
 use AltchaOrg\Altcha\ChallengeOptions;
 use Fnn\FnnPowermailAltcha\Service\AltchaService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class AltchaSpamProtectionViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
@@ -45,8 +44,6 @@ class AltchaSpamProtectionViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\A
 
         $this->hmacKey = $this->getHmacKey($this->arguments['settings']);
 
-        $altchaService = GeneralUtility::makeInstance(AltchaService::class,$this->hmacKey, $this->maxNumber, $this->expires, $this->pid);
-
         if (isset($this->arguments['settings']['spamshield']['methods'][2025]['configuration']['maxNumber']) &&
             (int)$this->arguments['settings']['spamshield']['methods'][2025]['configuration']['maxNumber'] > 0) {
             $this->maxNumber = (int)$this->arguments['settings']['spamshield']['methods'][2025]['configuration']['maxNumber'];
@@ -78,7 +75,8 @@ class AltchaSpamProtectionViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\A
                 'waitAlert' => LocalizationUtility::translate($labelKeys['waitAlert']),
             ];
         }
-        DebuggerUtility::var_dump($altchaService);
+
+        $altchaService = GeneralUtility::makeInstance(AltchaService::class,$this->hmacKey, $this->maxNumber, $this->expires, $this->pid);
         return [
             'altchaChallenge' => $altchaService->createChallenge(),
             'langLabels' => $langLabels ?? [],
@@ -88,7 +86,11 @@ class AltchaSpamProtectionViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\A
         ];
     }
 
-    // TODO: Duplicate code here and in Spamshield Validator. Refactoring to later time
+    /**
+     * @param $settings
+     * @return string
+     * TODO: Duplicate code fragment. See fnn_powermail_altcha/Classes/Domain/Validator/SpamShield/AltchaMethod.php. Refactoring required.
+     */
     private function getHmacKey($settings): string
     {
         if($settings['spamshield']['methods'][2025]['configuration']['hmacKey'] !== '[YOUR_UNIQUE_KEY_HERE]' && $settings['spamshield']['methods'][2025]['configuration']['hmacKey'] !== '') {

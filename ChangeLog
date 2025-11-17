@@ -1,3 +1,11 @@
+v10.0.5 +
+  * adds support for TYPO3 encryption key, uses $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'] if no hmac is set in setup
+v10.0.4 +
+  * adds Content Security Policy configuration for fixing issues with chrome browser
+v10.0.3 +
+  * Bugfix & Merge Request for hiding altcha logo and header
+v10.0.2 +
+  * reduces field size for field 'challenge' from 1024 to 256 byte
 v10.0.1 +
   * Consideration of an additional create action in the spam shield class
 

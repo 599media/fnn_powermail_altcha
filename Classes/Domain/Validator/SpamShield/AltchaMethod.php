@@ -5,7 +5,6 @@ use Fnn\FnnPowermailAltcha\Service\AltchaService;
 use In2code\Powermail\Domain\Model\Answer;
 use In2code\Powermail\Domain\Validator\SpamShield\AbstractMethod;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Class AltchaMethod
@@ -70,13 +69,7 @@ class AltchaMethod extends AbstractMethod
 
         $this->hmacKey = $this->getHmacKey($this->settings);
 
-        $altchaService = GeneralUtility::makeInstance(
-            AltchaService::class,
-            $this->hmacKey,
-            (int)$this->settings['spamshield']['methods'][2025]['configuration']['maxNumber'],
-            (int)$this->settings['spamshield']['methods'][2025]['configuration']['expires']);
-
-            $this->hmacKey = $altchaService->getHmacKey($this->arguments['settings']);
+        //$this->hmacKey = $this->getHmacKey($this->arguments['settings']);
 
         if (isset( $this->settings['settings']['spamshield']['methods'][2025]['configuration']['maxNumber']) &&
             (int) $this->settings['settings']['spamshield']['methods'][2025]['configuration']['maxNumber'] > 0) {
@@ -95,6 +88,12 @@ class AltchaMethod extends AbstractMethod
         $decodedPayload = base64_decode($value);
         $payload = json_decode($decodedPayload, true);
 
+        $altchaService = GeneralUtility::makeInstance(
+            AltchaService::class,
+            $this->hmacKey,
+            $this->maxNumber,
+            $this->expires);
+
         $checkResult = $altchaService->verifySolution($payload);
         if ($checkResult) {
             $answer->setValue('valid');
@@ -105,6 +104,11 @@ class AltchaMethod extends AbstractMethod
         return $checkResult;
     }
 
+    /**
+     * @param $settings
+     * @return string
+     * TODO: Duplicate code fragment. See fnn_powermail_altcha\Classes\ViewHelpers\AltchaSpamProtectionViewHelper.php. Refactoring required.
+     */
     private function getHmacKey($settings): string
     {
         if($settings['spamshield']['methods'][2025]['configuration']['hmacKey'] !== '[YOUR_UNIQUE_KEY_HERE]' && $settings['spamshield']['methods'][2025]['configuration']['hmacKey'] !== '') {

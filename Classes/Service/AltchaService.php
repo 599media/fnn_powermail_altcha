@@ -39,7 +39,6 @@ class AltchaService
      * @return \AltchaOrg\Altcha\Challenge The created challenge instance from the Altcha library.
      */
     public function createChallenge(): \AltchaOrg\Altcha\Challenge {
-
         $options = new ChallengeOptions([
             'hmacKey'   => $this->hmacKey,
             'maxNumber' => $this->maxNumber,
@@ -48,7 +47,6 @@ class AltchaService
 
         /** @var \AltchaOrg\Altcha\Challenge $altchaChallenge */
         $altchaChallenge = Altcha::createChallenge($options);
-
         $challenge = new Challenge(
             $altchaChallenge->challenge,
             $options->expires->getTimestamp()
@@ -76,7 +74,6 @@ class AltchaService
         }
 
         $checkResult = Altcha::verifySolution($payload, $this->hmacKey, true);
-
         if ($checkResult) {
             $challenge->setSolved(true);
             $this->challengeRepository->update($challenge);
