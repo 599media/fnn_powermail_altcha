@@ -1,21 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AltchaOrg\Altcha;
+
+use AltchaOrg\Altcha\Hasher\Algorithm;
 
 class Payload
 {
-    public $algorithm;
-    public $challenge;
-    public $number;
-    public $salt;
-    public $signature;
-
-    public function __construct($algorithm, $challenge, $number, $salt, $signature)
-    {
-        $this->algorithm = $algorithm;
-        $this->challenge = $challenge;
-        $this->number = $number;
-        $this->salt = $salt;
-        $this->signature = $signature;
+    public function __construct(
+        public readonly Algorithm $algorithm,
+        public readonly string $challenge,
+        public readonly int $number,
+        public readonly string $salt,
+        public readonly string $signature,
+    ) {
     }
 }

@@ -6,7 +6,7 @@ The ALTCHA PHP Library is a lightweight, zero-dependency library designed for cr
 
 This library is compatible with:
 
-- PHP 7.4+
+- PHP 8.2+ (use version v0.x.x for older PHP version)
 - All major platforms (Linux, Windows, macOS)
 
 ## Example
@@ -33,15 +33,15 @@ require 'vendor/autoload.php';
 use AltchaOrg\Altcha\ChallengeOptions;
 use AltchaOrg\Altcha\Altcha;
 
-$hmacKey = 'secret hmac key';
+$altcha = new Altcha('secret hmac key');
 
 // Create a new challenge
-$options = new ChallengeOptions([
-    'hmacKey'   => $hmacKey,
-    'maxNumber' => 50000, // the maximum random number
-]);
+$options = new ChallengeOptions(
+    maxNumber: 50000, // the maximum random number
+    expires: (new \DateTimeImmutable())->add(new \DateInterval('PT10S')),
+);
 
-$challenge = Altcha::createChallenge($options);
+$challenge = $altcha->createChallenge($options);
 echo "Challenge created: " . json_encode($challenge) . "\n";
 
 // Example payload to verify
@@ -54,7 +54,7 @@ $payload = [
 ];
 
 // Verify the solution
-$ok = Altcha::verifySolution($payload, $hmacKey, true);
+$ok = $altcha->verifySolution($payload, true);
 
 if ($ok) {
     echo "Solution verified!\n";
@@ -65,47 +65,36 @@ if ($ok) {
 
 ## API
 
-### `Altcha::createChallenge(array $options): array`
+### `Altcha::createChallenge(ChallengeOptions $options): Challenge`
 
 Creates a new challenge for ALTCHA.
 
-**Parameters:**
+**Returns:** `Challenge`
 
-- `options array`:
-  - `algorithm string`: Hashing algorithm to use (`SHA-1`, `SHA-256`, `SHA-512`, default: `SHA-256`).
-  - `maxNumber int`: Maximum number for the random number generator (default: 1,000,000).
-  - `saltLength int`: Length of the random salt (default: 12 bytes).
-  - `hmacKey string`: Required HMAC key.
-  - `salt string`: Optional salt string. If not provided, a random salt will be generated.
-  - `number int`: Optional specific number to use. If not provided, a random number will be generated.
-  - `expires \DateTime`: Optional expiration time for the challenge.
-  - `params array`: Optional URL-encoded query parameters.
+#### `ChallengeOptions`
 
-**Returns:** `array`
+```php
+$options = new ChallengeOptions(
+    algorithm: Algorithm::SHA256,
+    maxNumber: BaseChallengeOptions::DEFAULT_MAX_NUMBER,
+    expires: (new \DateTimeImmutable())->add(new \DateInterval('PT10S')),
+    params: ['query_param' => '123'],
+    saltLength: 12
+);
+```
 
-### `Altcha::verifySolution(array $payload, string $hmacKey, bool $checkExpires): bool`
+### `Altcha::verifySolution(array|string $payload, bool $checkExpires): bool`
 
 Verifies an ALTCHA solution.
 
 **Parameters:**
 
-- `payload array`: The solution payload to verify.
-- `hmacKey string`: The HMAC key used for verification.
+- `data array|string`: The solution payload to verify.
 - `checkExpires bool`: Whether to check if the challenge has expired.
 
 **Returns:** `bool`
 
-### `Altcha::extractParams(array $payload): array`
-
-Extracts URL parameters from the payload's salt.
-
-**Parameters:**
-
-- `payload array`: The payload containing the salt.
-
-**Returns:** `array`
-
-### `Altcha::verifyFieldsHash(array $formData, array $fields, string $fieldsHash, string $algorithm): bool`
+### `Altcha::verifyFieldsHash(array $formData, array $fields, string $fieldsHash, Algorithm $algorithm): bool`
 
 Verifies the hash of form fields.
 
@@ -118,18 +107,17 @@ Verifies the hash of form fields.
 
 **Returns:** `bool`
 
-### `Altcha::verifyServerSignature($payload, string $hmacKey): array`
+### `Altcha::verifyServerSignature(array|string $payload): ServerSignatureVerification`
 
 Verifies the server signature.
 
 **Parameters:**
 
-- `payload mixed`: The payload to verify (string or `ServerSignaturePayload` array).
-- `hmacKey string`: The HMAC key used for verification.
+- `data array|string`: The payload to verify (string or `ServerSignaturePayload` array).
 
-**Returns:** `array`
+**Returns:** `ServerSignatureVerification`
 
-### `Altcha::solveChallenge(string $challenge, string $salt, string $algorithm, int $max, int $start, $stopChan = null): array`
+### `Altcha::solveChallenge(string $challenge, string $salt, Algorithm $algorithm, int $max, int $start = 0): array`
 
 Finds a solution to the given challenge.
 
@@ -141,8 +129,33 @@ Finds a solution to the given challenge.
 - `max int`: Maximum number to iterate to.
 - `start int`: Starting number.
 
-**Returns:** `array`
+**Returns:** `null|Solution`
 
+## Generate obfuscation payload
+
+Generate an obfuscated payload for client-side clarification:
+
+```php
+<?php
+
+// With optional maxNumber (defaults to 10_000)
+$obfuscator = new \AltchaOrg\Altcha\Obfuscator(); 
+
+// Text to reveal after client-side PoW
+$plaintext = 'mailto:hello@example.com';
+
+// Optional shared key
+$key = 'shared-secret';
+
+// Optionally fix the counter; omit to use a random counter in [0, maxNumber]
+$fixedCounter = null;
+
+// Generate base64 obfuscated payload 
+$payload = $obfuscator->obfuscateData($plaintext, $key, $fixedCounter);
+
+echo $payload;
+// P7bJsUgzxP416d1voeF/QnQOD5g7GItB/zdfkoBrKgZK4N4IYkDJqg==
+```
 
 ## Tests
 

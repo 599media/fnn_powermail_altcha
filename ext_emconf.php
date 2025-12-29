@@ -1,6 +1,6 @@
 <?php
 
-$EM_CONF[$_EXTKEY] = [
+$EM_CONF['fnn_powermail_altcha'] = [
     'title' => 'Altcha Captcha for Powermail',
     'description' => 'Accessible and GDPR compliant proof-of-work (pow) captcha for powermail, no external service required',
     'version' => '10.0.4',
@@ -10,8 +10,8 @@ $EM_CONF[$_EXTKEY] = [
     'author_company' => '599media GmbH',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.0-13.4.99',
-            'php' => '7.4.0-8.4.99',
+            'typo3' => '11.5.0-13.4.99',
+            'php' => '8.2.0-8.4.99',
             'powermail' => '8.5.0-13.99.99'
         ]
     ],
