@@ -12,7 +12,7 @@ $EM_CONF['fnn_powermail_altcha'] = [
         'depends' => [
             'typo3' => '11.5.0-13.4.99',
             'php' => '8.2.0-8.4.99',
-            'powermail' => '8.5.0-13.99.99'
+            'powermail' => '10.9.1-13.99.99'
         ]
     ],
     'state' => 'stable',
