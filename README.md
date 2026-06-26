@@ -18,27 +18,21 @@ The visitor then sees the Altcha widget. This additional validation effectively 
 ## Overview
 
 - **Extension-Key:** `fnn_powermail_altcha`
-- **Version:** 10.0.0
+- **Version:** 12.0.0
 - **Author:** 599media Dev-Team (599media GmbH)
 - **License:** MIT
 - **Category:** Service
 - **Dependencies:**
-    - TYPO3 ≥ 10.4.0 – 13.4.99
-    - PHP ≥ 7.4.0 – 8.4.99
-    - Powermail ≥ 8.5.0 – 13.99.99
+    - TYPO3 ≥ 12.4.0 – 13.4.99
+    - PHP ≥ 8.2.0 – 8.4.99
+    - Powermail ≥ 12.5.3 – 13.99.99
 
 ---
 
 ## Installation
 
 ### Install extension via ZIP file ###
-1. Download ZIP file
-2. Log into your TYPO3 backend
-3. Go to Extension Manager module
-4. Press the upload button on the top bar
-5. Select the ZIP file and upload it. If you want to overwrite an existing extension installation, activate the checkbox.
-6. Go to your rootpage, open the TypoScript record and add 'Powermail Altcha' to 'include TypoScript sets'
-7. Clear backend cache
+Installation can now only be performed using Composer.
 
 ### Install extension via composer command ###
 1. Go to your folder where the root composer.json file is located
@@ -202,3 +196,5 @@ Ignore the folder Vendor/altcha-lib-php. Only the complete source code of the ex
 
 With a Composer installation, the library is installed by Composer.
 
+## Thank you for your support ##
+- Andreas Kießling https://github.com/akiessling
