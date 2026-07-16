@@ -88,6 +88,11 @@ class AltchaMethod extends AbstractMethod
         $decodedPayload = base64_decode($value);
         $payload = json_decode($decodedPayload, true);
 
+        if (!is_array($payload) || !is_string($payload['challenge'] ?? null)) {
+            $answer->setValue('invalid');
+            return false;
+        }
+
         $altchaService = GeneralUtility::makeInstance(
             AltchaService::class,
             $this->hmacKey,
