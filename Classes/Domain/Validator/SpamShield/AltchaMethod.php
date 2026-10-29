@@ -50,7 +50,8 @@ class AltchaMethod extends AbstractMethod
         /** @var Answer $answer */
         foreach ($this->mail->getAnswers() as $answer) {
             if ($answer->getField()->getType() == 'altchaSpamProtection') {
-                return !$this->altchaCheck($answer->getValue(), $answer);
+                $value = $answer->getValue();
+                return !$this->altchaCheck(is_string($value) ? $value : '', $answer);
             }
         }
 
@@ -87,6 +88,12 @@ class AltchaMethod extends AbstractMethod
 
         $decodedPayload = base64_decode($value);
         $payload = json_decode($decodedPayload, true);
+
+        // An empty or malformed value is a failed check, not a TypeError
+        if (!is_array($payload) || !is_string($payload['challenge'] ?? null)) {
+            $answer->setValue('invalid');
+            return false;
+        }
 
         $altchaService = GeneralUtility::makeInstance(
             AltchaService::class,

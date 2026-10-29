@@ -2,7 +2,7 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 	<file source-language="en" target-language="de" original="messages" datatype="plaintext" product-name="fnn_powermail_altcha" date="2025-06-03T11:21:42+02:00">
 		<body>
-			<trans-unit id="tx_fnnpowermailaltcha_domain_model_challenge.challenge" resname="tx_fnnpowermailaltcha_domain_model_challenge.challenge" approved="no">
+			<trans-unit id="tx_fnnpowermailaltcha_domain_model_challenge.challenge" resname="tx_fnnpowermailaltcha_domain_model_challenge.challenge">
 				<source>Altcha: Challenge</source>
 				<target>Altcha: Herausforderung</target>
 			</trans-unit>

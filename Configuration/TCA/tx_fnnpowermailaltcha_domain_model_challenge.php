@@ -14,7 +14,6 @@ return [
         'iconfile' => 'EXT:fnn_powermail_altcha/Resources/Public/Icons/tx_fnnpowermailaltcha_domain_model_challenge.svg',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'searchFields' => 'uid,challenge',
     ],
     'types' => [
         0 => [
